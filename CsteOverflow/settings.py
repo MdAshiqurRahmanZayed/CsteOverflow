@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'cstebase',
     'csteusers',
     'crispy_forms',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -125,10 +126,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS =[os.path.join(BASE_DIR,'static')]
 
+LOGIN_URL = 'login'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
-
+CRISPY_TEMPLATE_PACK='bootstrap4'
 
 
 LOGIN_REDIRECT_URL = 'cstebase:home'

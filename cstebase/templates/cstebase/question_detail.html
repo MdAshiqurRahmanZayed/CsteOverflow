@@ -111,50 +111,51 @@
                               Asked By: <a href="{% url 'profile' %}">{{ object.user|title }}</a>&nbsp;&nbsp;&nbsp;
                               |&nbsp;&nbsp;&nbsp; On: {{ object.date_created|date:"j F, Y" }}</h6>
                          <br>
-                         <form action="" method="POST">
-                         {% comment %} <form action="{% url 'stackbase:like_post' object.pk %}" method="POST"> {% endcomment %}
-                              {% csrf_token %}
-                              {% if user.is_authenticated %}
-                              {% if liked %}
-                              <div style="display: flex; align-items: center; margin-left: 10px;">
-                                   <button type="submit" name="question_id" value="{{ question.id }}"
-                                        style="border: none; border-radius: 60px;"><img
-                                             src="https://image.similarpng.com/very-thumbnail/2020/06/Dislike-icon-transparent-PNG.png"
-                                             alt="" style="width: 40px;"></button>
-                                   <h5 style="margin-left: 10px; cursor: pointer;"> | {{ total_likes }} Likes</h5>
-                              </div>
+                         {% comment %} <form action="" method="POST"> {% endcomment %}
+                              <form action="{% url 'cstebase:like_post' object.pk %}" method="POST">
+                                   {% csrf_token %}
+                                   {% if user.is_authenticated %}
+                                   {% if liked %}
+                                   <div style="display: flex; align-items: center; margin-left: 10px;">
+                                        <button type="submit" name="question_id" value="{{ question.id }}"
+                                             style="border: none; border-radius: 60px;"><img
+                                                  src="https://image.similarpng.com/very-thumbnail/2020/06/Dislike-icon-transparent-PNG.png"
+                                                  alt="" style="width: 40px;"></button>
+                                        <h5 style="margin-left: 10px; cursor: pointer;"> | {{ total_likes }} Likes</h5>
+                                   </div>
+                                   {% else %}
+                                   <div style="display: flex; align-items: center; margin-left: 10px;">
+                                        <button type="submit" name="question_id" value="{{ question.id }}"
+                                             style="border: none; border-radius: 30px;"><img
+                                                  src="https://i.pinimg.com/originals/39/44/6c/39446caa52f53369b92bc97253d2b2f1.png"
+                                                  alt="" style="width: 40px;"></button>
+                                        <h5 style="margin-left: 10px; cursor: pointer;"> | {{ total_likes }} Likes</h5>
+                                   </div>
+                                   {% endif %}
+                                   {% else %}
+                                   <h5 style="margin-left: 10px; cursor: pointer;"><a href="{% url 'login' %}">Login</a>
+                                        to
+                                        Like Question | {{ total_likes }} Likes</h5>
+                                   {% endif %}
+
+                              </form>
+                              <br>
+                              <h2>Answers...</h2> <br><br><br>
+
+                              {% if not question.comment.all %}
+                              <h3>No Answers yet... <a href="">Answer Question</a> </h3>
                               {% else %}
-                              <div style="display: flex; align-items: center; margin-left: 10px;">
-                                   <button type="submit" name="question_id" value="{{ question.id }}"
-                                        style="border: none; border-radius: 30px;"><img
-                                             src="https://i.pinimg.com/originals/39/44/6c/39446caa52f53369b92bc97253d2b2f1.png"
-                                             alt="" style="width: 40px;"></button>
-                                   <h5 style="margin-left: 10px; cursor: pointer;"> | {{ total_likes }} Likes</h5>
-                              </div>
-                              {% endif %}
-                              {% else %}
-                              <h5 style="margin-left: 10px; cursor: pointer;"><a href="{% url 'login' %}">Login</a> to
-                                   Like Question | {{ total_likes }} Likes</h5>
+                              {% for comment in question.comment.all %}
+                              <h3 style="font-weight: normal; font-size: 15px;">{{comment.content|safe}}</h3>
+                              <h3 style="font-size: 10px;">Answered by: <i><a href="">{{comment.name}}</a> - On:
+                                        {{comment.date_created|date:"j F, Y"}}</i></h3>
+                              <hr>
+                              {% endfor %}
                               {% endif %}
 
-                         </form>
-                         <br>
-                         <h2>Answers...</h2> <br><br><br>
-
-                         {% if not question.comment.all %}
-                         <h3>No Answers yet... <a href="">Answer Question</a> </h3>
-                         {% else %}
-                         {% for comment in question.comment.all %}
-                         <h3 style="font-weight: normal; font-size: 15px;">{{comment.content|safe}}</h3>
-                         <h3 style="font-size: 10px;">Answered by: <i><a href="">{{comment.name}}</a> - On:
-                                   {{comment.date_created|date:"j F, Y"}}</i></h3>
-                         <hr>
-                         {% endfor %}
-                         {% endif %}
 
 
-
-                         <!-- {% if not questions.comments.all %}
+                              <!-- {% if not questions.comments.all %}
                         <h3>No Answers yet... <a href="">Answer Question</a> </h3>
                     {% else %}
 
@@ -183,34 +184,39 @@
                             <h5 style="margin-left: 10px; cursor: pointer;"><a href="{% url 'login' %}">Login</a> to Like Question |  {{ total_likes }} Likes</h5>
                         {% endif %}
                     </form> -->
-                         <a class="btn btn-outline-primary" id="fa"
-                              href=""
-                              style="text-decoration: none;">Answer Question</a>
-                         <a style="text-decoration: none; " class="btn btn-outline-success"
-                              href="">&#x270E;</a>
-                         <a style="text-decoration: none; " class="btn btn-outline-danger"
-                              href="">&#x2716;</a>
-                         <a style="text-decoration: none; " class="btn btn-outline-secondary"
-                              href="">&#x21a9;</a>
+                              {% with comments.count as total_comments %}
+                              <legend class="border-bottom mb-4">{{total_comments }}
+                                   comment{{total_comments|pluralize }}</legend>
+                              {% endwith %}
+                              <a class="btn btn-outline-primary" id="fa"
+                                   href="{% url 'cstebase:question-comment' question.id %}"
+                                   style="text-decoration: none;">Answer Question</a>
+                              <a style="text-decoration: none; " class="btn btn-outline-success"
+                                   href="{% url 'cstebase:question-update' question.id %}">&#x270E;</a>
+                              <a style="text-decoration: none; " class="btn btn-outline-danger"
+                                   href="{% url 'cstebase:question-delete' question.id %}">&#x2716;</a>
+                              <a style="text-decoration: none; " class="btn btn-outline-secondary"
+                                   href="{% url 'cstebase:question-lists' %}">&#x21a9;</a>
 
-                         {% comment %} <a class="btn btn-outline-primary" id="fa"
-                              href="{% url 'stackbase:question-comment' question.id %}"
-                              style="text-decoration: none;">Answer Question</a>
-                         <a style="text-decoration: none; " class="btn btn-outline-success"
-                              href="{% url 'stackbase:question-update' question.id %}">&#x270E;</a>
-                         <a style="text-decoration: none; " class="btn btn-outline-danger"
-                              href="{% url 'stackbase:question-delete' question.id %}">&#x2716;</a>
-                         <a style="text-decoration: none; " class="btn btn-outline-secondary"
-                              href="{% url 'stackbase:question-lists' %}">&#x21a9;</a> {% endcomment %}
-                    </div> <br><br>
-                    <!-- Answer Section -->
+                              {% comment %} <a class="btn btn-outline-primary" id="fa"
+                                   href="{% url 'stackbase:question-comment' question.id %}"
+                                   style="text-decoration: none;">Answer Question</a>
+                              <a style="text-decoration: none; " class="btn btn-outline-success"
+                                   href="{% url 'stackbase:question-update' question.id %}">&#x270E;</a>
+                              <a style="text-decoration: none; " class="btn btn-outline-danger"
+                                   href="{% url 'stackbase:question-delete' question.id %}">&#x2716;</a>
+                              <a style="text-decoration: none; " class="btn btn-outline-secondary"
+                                   href="{% url 'stackbase:question-lists' %}">&#x21a9;</a> {% endcomment %}
 
-               </div> <br>
+                              <!-- Answer Section -->
+
+                    </div> <br>
+               </div>
           </div>
-     </div>
-     <br>
+          <br>
 
      </div>
+
      <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script> -->
 </body>
