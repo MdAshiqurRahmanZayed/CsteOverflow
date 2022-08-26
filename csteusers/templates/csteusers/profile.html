@@ -165,10 +165,13 @@
                                 <div class="col-sm-4 bg-c-lite-green user-profile">
                                     <div class="card-block text-center text-white">
                                         <div class="m-b-25"> <img src="{{ user.profile.image.url }}" class="img-radius" alt="User-Profile-Image"> </div>
+                                        
+                                        
                                         <h6 class="f-w-600" style="font-size: 24px; color: black;"><!-- Add username here -->{{ user.username|title }}</h6>
                                         <p style="font-size: 14px; color: black;"><!-- Add bio here -->{{ user.profile.bio|title }}</p> <i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>
                                         <div style="margin-top: 10px;">
-                                            <button class="btn btn-primary" id="logout-btn"><a id="fa" href="{% url 'profile_update' %}" style="color: white; text-decoration: none;">Update Profile</a></button>
+                                            <a id="fa" href="{% url 'profile_update'  %}" style="color: white; text-decoration: none;"><button class="btn btn-primary" id="logout-btn">Update Profile</button></a>
+                                            {% comment %} <button class="btn btn-primary" id="logout-btn"><a id="fa" href="{% url 'profile_update'  %}" style="color: white; text-decoration: none;">Update Profile</a></button> {% endcomment %}
 {% comment %}                                             <button class="btn btn-primary" id="logout-btn"><a id="fa" href="{% url 'profile_update' %}" style="color: white; text-decoration: none;">Update Profile</a></button> {% endcomment %}
                                         </div>
                                     </div>
@@ -207,9 +210,10 @@
                                                 <h6 class="text-muted f-w-400"><a href="#">Project2</a></h6>
                                             </div>
                                             <div style="margin-top: 55px;">
-                                                <button class="btn btn-secondary" id="logout-btn"><a id="fa" href="" style="color: white; text-decoration: none;">Ask Question</a></button>
-                                                <button class="btn btn-outline-primary" id="logout-btn"><a id="fa" href="" style="color: rgb(0, 0, 0); text-decoration: none;">View Questions</a></button>
+                                                <button class="btn btn-secondary" id="logout-btn"><a id="fa" href="{% url 'cstebase:question-create' %}" style="color: white; text-decoration: none;">Ask Question</a></button>
+                                                <button class="btn btn-outline-primary" id="logout-btn"><a id="fa" href="{% url 'cstebase:ShowAllQuestionProfileBased' user.username %}" style="color: rgb(0, 0, 0); text-decoration: none;">View Questions</a></button>
                                             </div>
+                                            
                                         </div>
                                         
                                         

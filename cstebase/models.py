@@ -4,6 +4,9 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse 
 from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
+
+
 
 class Question(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -13,6 +16,9 @@ class Question(models.Model):
     likes = models.ManyToManyField(User, related_name='question_post')
     date_created = models.DateTimeField(default=timezone.now)   
     anonymous = models.BooleanField(default=False)
+    # answered = models.BooleanField(default=False)
+    
+    
     
     def __str__(self):
         return f'{self.user.username} - Question'
@@ -32,6 +38,7 @@ class Comment(models.Model):
     content = RichTextField()
     # content = models.TextField(null=True,blank=True)
     date_created = models.DateTimeField(default=timezone.now)
+    answered = models.BooleanField(default=False)
     
     def __str__(self):
         return f'%s - %s ' % (self.question.title,self.question.user)

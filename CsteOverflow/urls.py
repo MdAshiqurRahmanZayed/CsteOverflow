@@ -20,7 +20,7 @@ from csteusers import views as user_view
 from django.contrib.auth import views as auth_view
 from django.conf import settings
 from django.conf.urls.static import static
-
+from cstebase import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,7 +33,10 @@ urlpatterns = [
     
     # Profile 
     path('profile/',user_view.profile,name= "profile" ),
-    path('profile/update/',user_view.profile_update,name= "profile_update" ),
-]
+    path('profile/update',user_view.profile_update,name= "profile_update" ),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+    
+    
+] 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)

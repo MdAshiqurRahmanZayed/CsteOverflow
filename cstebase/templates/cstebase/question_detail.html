@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -102,13 +103,24 @@
                <div class="questions">
                     <div class="container"
                          style="background-color: rgba(255, 235, 209, 0.808); padding: 5px; box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 5px 0px; border-radius: 20px;">
-                         <h3 id="fh3">{{question.title}}</h3>
+                         <a style='text-decoration:none' href="">
+                              <h3 id="fh3">{{question.title}}</h3>
+                         </a>
                          <hr>
+                         {% comment %} <img src="{% static 'image/check-mark.png' %}" style='width:50px' alt="">
+                         {% endcomment %}
                          <h6 id="fh6">{{ question.content|safe }}</h6>
                          <hr>
                          <h6 id="fh6"
                               style="font-size: 10px; font-style: italic; color: rgb(155, 155, 155); text-align: right;">
-                              Asked By: <a href="{% url 'profile' %}">{{ object.user|title }}</a>&nbsp;&nbsp;&nbsp;
+                              Asked By: {% if question.anonymous == True %}
+                              <a href="">Anonymous</a>
+                              {% else %}
+
+                              <a
+                                   href="{% url 'cstebase:show_profile' question.user.username  %} ">{{ question.user.username|title }}</a>
+                              {% endif %}
+                              &nbsp;&nbsp;&nbsp;
                               |&nbsp;&nbsp;&nbsp; On: {{ object.date_created|date:"j F, Y" }}</h6>
                          <br>
                          {% comment %} <form action="" method="POST"> {% endcomment %}
@@ -140,16 +152,54 @@
 
                               </form>
                               <br>
+                              {% with question.comment.count as total_comments %}
+                              <legend class="border-bottom mb-4">{{total_comments }}
+                                   comment{{total_comments|pluralize }}</legend>
+                              {% endwith %}
                               <h2>Answers...</h2> <br><br><br>
+                              {% for comment in question.comment.all %}
+                              {% if comment.answered is True %}
+                              <div class="container">
+
+
+                                   <h3 style="font-weight: normal; font-size: 15px;">{{comment.content|safe}}</h3>
+
+                                   <h3 style="font-size: 10px;">Answered by: <i><a href="">{{comment.name}}</a> - On:
+                                             {{comment.date_created|date:"j F, Y"}}</i>
+                                        <img src="{% static 'image/check-mark.png' %}" style='width:40px' alt="">
+
+
+                                   </h3>
+                                   <hr>
+                              </div>
+                              {% endif %}
+                              {% endfor %}
+
 
                               {% if not question.comment.all %}
-                              <h3>No Answers yet... <a href="">Answer Question</a> </h3>
+                              <h3>No Answers yet... </h3>
                               {% else %}
                               {% for comment in question.comment.all %}
-                              <h3 style="font-weight: normal; font-size: 15px;">{{comment.content|safe}}</h3>
-                              <h3 style="font-size: 10px;">Answered by: <i><a href="">{{comment.name}}</a> - On:
-                                        {{comment.date_created|date:"j F, Y"}}</i></h3>
-                              <hr>
+                              {% comment %} <div class="container">
+                                   {% if comment.answered is True %}
+                                   <img src="{% static 'image/check-mark.png' %}" style='width:50px' alt="">
+
+                                   {% endif %}
+                              </div> {% endcomment %}
+                              {% if comment.answered is False %}
+
+                              <div class="container">
+
+
+                                   <h3 style="font-weight: normal; font-size: 15px;">{{comment.content|safe}}</h3>
+
+                                   <h3 style="font-size: 10px;">Answered by: <i><a href="">{{comment.name}}</a> - On:
+                                             {{comment.date_created|date:"j F, Y"}}</i>
+
+                                   </h3>
+                                   <hr>
+                              </div>
+                              {% endif %}
                               {% endfor %}
                               {% endif %}
 
@@ -184,17 +234,19 @@
                             <h5 style="margin-left: 10px; cursor: pointer;"><a href="{% url 'login' %}">Login</a> to Like Question |  {{ total_likes }} Likes</h5>
                         {% endif %}
                     </form> -->
-                              {% with comments.count as total_comments %}
-                              <legend class="border-bottom mb-4">{{total_comments }}
-                                   comment{{total_comments|pluralize }}</legend>
-                              {% endwith %}
+                              
                               <a class="btn btn-outline-primary" id="fa"
                                    href="{% url 'cstebase:question-comment' question.id %}"
                                    style="text-decoration: none;">Answer Question</a>
+
+                              {% if user.id == question.user.id %}
+
                               <a style="text-decoration: none; " class="btn btn-outline-success"
                                    href="{% url 'cstebase:question-update' question.id %}">&#x270E;</a>
                               <a style="text-decoration: none; " class="btn btn-outline-danger"
                                    href="{% url 'cstebase:question-delete' question.id %}">&#x2716;</a>
+                              {% endif %}
+
                               <a style="text-decoration: none; " class="btn btn-outline-secondary"
                                    href="{% url 'cstebase:question-lists' %}">&#x21a9;</a>
 

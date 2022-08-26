@@ -101,6 +101,8 @@
     <div class="container">
         <div id="sub-nav">
             <h1 id="fh1">Top Questions</h1>
+            {% endfor %}
+               
             {% if user.is_authenticated %}
             <button class="btn" id="logout-btn"><a id="fa" href="{% url 'cstebase:question-create' %}"
                     style="color: white; text-decoration: none;">Ask Question</a></button>

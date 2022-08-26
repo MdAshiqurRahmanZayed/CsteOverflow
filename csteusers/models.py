@@ -4,7 +4,7 @@ from tkinter import CASCADE
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
-
+# from phonenumber_field.modelfields import PhoneNumberField
 
 class Profile(models.Model):
      user = models.OneToOneField(User,on_delete=models.CASCADE)
@@ -13,7 +13,7 @@ class Profile(models.Model):
      birthday =  models.DateField(blank=True, null=True)
      bio = models.CharField( max_length= 150)
      phone = models.IntegerField(blank=True, null=True) 
-     image = models.ImageField(default ='default.jpg',  upload_to="Profile_pic")
+     image = models.ImageField(default ='default.jpg',  upload_to="images/profile")
      
      
      def __str__(self):

@@ -2,6 +2,8 @@ from re import template
 from django.urls import path
 from . import views
 
+
+
 app_name = 'cstebase'
 
 urlpatterns = [
@@ -16,5 +18,12 @@ urlpatterns = [
     path('questions/<int:pk>/delete',views.QuestionDeleteView.as_view(),name='question-delete'),
     path('questions/<int:pk>/comment',views.AddCommentView.as_view(),name='question-comment'),
     path('like/<int:pk>', views.like_view, name="like_post"),
+    path('showprofile/<str:str>', views.ShowProfile,name='show_profile'),
+    path('questions-all/<str:str>', views.ShowAllQuestionProfileBased,name='ShowAllQuestionProfileBased'),
+    #path('all-question', views.ShowAllQuestionProfileBased, name="ShowAllQuestionProfileBased"),
+    
+    
+
+    
 
 ]
