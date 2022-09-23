@@ -99,29 +99,37 @@
                 <button class="btn btn-primary" id="logout-btn"><a id="fa" href="" style="color: white; text-decoration: none;">Ask Question</a></button>
             </div> -->
           </div>
+          
           <div class="list-question">
                <div class="questions">
                     <div class="container"
                          style="background-color: rgba(255, 235, 209, 0.808); padding: 5px; box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 5px 0px; border-radius: 20px;">
                          <a style='text-decoration:none' href="">
                               <h3 id="fh3">{{question.title}}</h3>
+                              
                          </a>
-                         <hr>
-                         {% comment %} <img src="{% static 'image/check-mark.png' %}" style='width:50px' alt="">
-                         {% endcomment %}
-                         <h6 id="fh6">{{ question.content|safe }}</h6>
-                         <hr>
-                         <h6 id="fh6"
+                          <h6 id="fh6"
                               style="font-size: 10px; font-style: italic; color: rgb(155, 155, 155); text-align: right;">
                               Asked By: {% if question.anonymous == True %}
                               <a href="">Anonymous</a>
                               {% else %}
 
                               <a
-                                   href="{% url 'cstebase:show_profile' question.user.username  %} ">{{ question.user.username|title }}</a>
+                                   href="{% url 'cstebase:show_profile' question.user.username  %} "><img style="height:50px;width:50px;border-radius:50%" src="{{question.user.profile.image.url}}" alt=""> {{ question.user.username|title }}</a>
                               {% endif %}
                               &nbsp;&nbsp;&nbsp;
-                              |&nbsp;&nbsp;&nbsp; On: {{ object.date_created|date:"j F, Y" }}</h6>
+                              |&nbsp;&nbsp;&nbsp; On: {{ object.date_created|date:"j F, Y" }}
+                              Tag:
+                              {% for tag in question.tags.all %}
+                                <a href="{% url 'cstebase:post_tag' tag.slug %}">{{tag.name}}</a>
+                                {% endfor %}
+                         </h6>
+                         <hr>
+                         {% comment %} <img src="{% static 'image/check-mark.png' %}" style='width:50px' alt="">
+                         {% endcomment %}
+                         <h6 id="fh6">{{ question.content|safe }}</h6>
+                         <hr>
+                        
                          <br>
                          {% comment %} <form action="" method="POST"> {% endcomment %}
                               <form action="{% url 'cstebase:like_post' object.pk %}" method="POST">
@@ -131,7 +139,7 @@
                                    <div style="display: flex; align-items: center; margin-left: 10px;">
                                         <button type="submit" name="question_id" value="{{ question.id }}"
                                              style="border: none; border-radius: 60px;"><img
-                                                  src="https://image.similarpng.com/very-thumbnail/2020/06/Dislike-icon-transparent-PNG.png"
+                                                  src="{% static 'image/Dislike.png' %}"
                                                   alt="" style="width: 40px;"></button>
                                         <h5 style="margin-left: 10px; cursor: pointer;"> | {{ total_likes }} Likes</h5>
                                    </div>
@@ -139,7 +147,7 @@
                                    <div style="display: flex; align-items: center; margin-left: 10px;">
                                         <button type="submit" name="question_id" value="{{ question.id }}"
                                              style="border: none; border-radius: 30px;"><img
-                                                  src="https://i.pinimg.com/originals/39/44/6c/39446caa52f53369b92bc97253d2b2f1.png"
+                                                   src="{% static 'image/like.png' %}"
                                                   alt="" style="width: 40px;"></button>
                                         <h5 style="margin-left: 10px; cursor: pointer;"> | {{ total_likes }} Likes</h5>
                                    </div>
@@ -151,6 +159,7 @@
                                    {% endif %}
 
                               </form>
+                              
                               <br>
                               {% with question.comment.count as total_comments %}
                               <legend class="border-bottom mb-4">{{total_comments }}

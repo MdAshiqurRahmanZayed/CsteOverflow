@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<ol>
+  <div class="container">
+
+    {% for tag in tags %}
+  
+  
+    <li style="font-size:2rem">
+     <a href="{% url 'cstebase:post_tag' tag.slug %}">{{tag.name}}</a>
+    </li>
+    {% endfor %}
+  </ol>
+  </div>
+
+
+{% endblock content %}

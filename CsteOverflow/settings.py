@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     "phonenumber_field",
      'django_filters',
+     'taggit',
 ]
 
 MIDDLEWARE = [
@@ -183,8 +184,8 @@ CKEDITOR_CONFIGS = {
         ],
         'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
         # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
-        # 'height': 291,
-        # 'width': '100%',
+        'height': 400,
+        'width': 1230,
         # 'filebrowserWindowHeight': 725,
         # 'filebrowserWindowWidth': 940,
         # 'toolbarCanCollapse': True,
@@ -208,3 +209,5 @@ CKEDITOR_CONFIGS = {
         ]),
     }
 }
+
+TAGGIT_CASE_INSENSITIVE = True

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse 
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
+from taggit.managers import TaggableManager
 
 
 
@@ -17,6 +18,7 @@ class Question(models.Model):
     date_created = models.DateTimeField(default=timezone.now)   
     anonymous = models.BooleanField(default=False)
     # answered = models.BooleanField(default=False)
+    tags = TaggableManager()
     
     
     
@@ -49,4 +51,20 @@ class Comment(models.Model):
     def save(self ,*args,**kwargs):
         super().save(*args,**kwargs)
         
-    
+class AboutPage(models.Model):
+    name = models.CharField( max_length=50)
+    title = models.CharField( max_length=50)
+    about = RichTextField()
+    image  = models.ImageField( upload_to='about/', height_field=None, width_field=None, max_length=None)
+    def __str__(self):
+        return self.name
+
+
+
+class teamMember(models.Model):
+    name = models.CharField( max_length=50)
+    title = models.CharField( max_length=50)
+    about = models.TextField()
+    image  = models.ImageField( upload_to='teamMember/', height_field=None, width_field=None, max_length=None)
+    def __str__(self):
+        return self.name

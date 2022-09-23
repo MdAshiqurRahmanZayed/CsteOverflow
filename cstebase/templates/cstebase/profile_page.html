@@ -165,7 +165,16 @@
                             <div class="row m-l-0 m-r-0">
                                 <div class="col-sm-4 bg-c-lite-green user-profile">
                                     <div class="card-block text-center text-white">
-                                        <div class="m-b-25"> <img src="{{ ShowProfile.profile.image.url }}" class="img-radius" alt="User-Profile-Image"> </div>
+                                        <div class="m-b-25"> 
+                                            {% comment %} {% if ShowProfile.profile.image == None %}
+                                            
+                                            <img src="{% static 'image/default.jpg' %}" class="img-radius" alt="User-Profile-Image"> 
+                                            {% else %}
+                                            <img src="{{ ShowProfile.profile.image.url }}" class="img-radius" alt="User-Profile-Image"> 
+
+                                            {% endif %} {% endcomment %}
+                                            <img src="{{ ShowProfile.profile.image.url }}" class="img-radius" alt="User-Profile-Image"> 
+                                        </div>
                                         
                                         
                                     
@@ -213,7 +222,7 @@
                                             </div>
                                             <div style="margin-top: 55px;">
                                                 {% comment %} <button class="btn btn-secondary" id="logout-btn"><a id="fa" href="{% url 'cstebase:question-create' %}" style="color: white; text-decoration: none;">Ask Question</a></button> {% endcomment %}
-                                                <button class="btn btn-outline-primary" id="logout-btn"><a id="fa" href="{% url 'cstebase:ShowAllQuestionProfileBased' ShowProfile.username %}" style="color: rgb(0, 0, 0); text-decoration: none;">View Questions</a></button>
+                                               <a id="fa" href="{% url 'cstebase:ShowAllQuestionProfileBased' ShowProfile.username %}" style="color: rgb(0, 0, 0); text-decoration: none;"> <button class="btn btn-outline-primary" id="logout-btn">View Questions</button></a>
                                             </div>
                                             
                                         </div>

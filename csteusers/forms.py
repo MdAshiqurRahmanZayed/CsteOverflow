@@ -28,8 +28,7 @@ class UserRegisterForm(UserCreationForm):
              #'password1': forms.TextInput(attrs={'class': 'form-control','placeholder':'Enter Password'}),
             #   'password2':forms.Textarea(attrs={'class': 'form-control','placeholder':'Enter your Password'})
             #   'password2': forms.TextInput(attrs={'class': 'form-control','placeholder':'Confirm Password'}),
-            
-
+ 
         }
 
 class UserUpdateForm(forms.ModelForm):

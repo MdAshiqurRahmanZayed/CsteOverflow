@@ -21,9 +21,13 @@ urlpatterns = [
     path('showprofile/<str:str>', views.ShowProfile,name='show_profile'),
     path('questions-all/<str:str>', views.ShowAllQuestionProfileBased,name='ShowAllQuestionProfileBased'),
     #path('all-question', views.ShowAllQuestionProfileBased, name="ShowAllQuestionProfileBased"),
-    
-    
-
-    
-
+    path('about/',views.About_page,name='about'),
+    path('tags/<slug:tag_slug>',views.TagListView.as_view(),name="post_tag"),
+    path('test/',views.test.as_view(),name="test"),
+    path('tags/',views.AllTags,name="tags"),
 ]
+    
+
+    
+
+

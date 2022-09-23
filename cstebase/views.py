@@ -1,10 +1,10 @@
 from multiprocessing import context
+from turtle import title
 from urllib import request
 from django.shortcuts import render,get_object_or_404,redirect
 from django.views.generic import ListView,DetailView,CreateView,UpdateView,DeleteView,TemplateView
-
 from csteusers.views import profile
-from .models import Question,Comment
+from .models import Question,Comment ,teamMember,AboutPage
 from .forms import *
 from django.urls import reverse_lazy,reverse
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
@@ -12,13 +12,28 @@ from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage
 from csteusers.models import Profile
 from django.contrib.auth.models import User
-
-
+from taggit.models import Tag 
 
 
 #home
 def home(request):
-     return render(request,'home.html')
+    about_member = teamMember.objects.all
+
+    context={
+        'about_member':about_member,
+
+    }
+    return render(request,'home.html',context)
+
+
+def AllTags(request):
+    tags = Tag.objects.filter().order_by('name')
+    context = {
+        'tags':tags 
+    }
+    return render(request,'cstebase/tags.html',context)
+    
+    
 
 class Home(ListView):
     model = Question
@@ -34,6 +49,18 @@ class Home(ListView):
             context['questions'] = context['questions'].filter(title__icontains = search_input)
             context['search_input'] = search_input
         return context
+    
+    
+    
+class TagListView(ListView):
+    model = Question
+   
+    template_name = "question_list.html"
+    context_object_name = "questions"
+
+    
+    def get_queryset(self):
+        return Question.objects.filter(tags__slug=self.kwargs.get('tag_slug')).order_by('-date_created')
     
 # CRUD
 
@@ -69,13 +96,24 @@ class QuestionListView(ListView):
     ordering = ['-date_created']
     paginate_by = 4
     #paginator_class = MyPaginator # We use our paginator class 
-    
+    tags = Tag.objects.all 
+    context ={
+            'tags':tags
+        }
+    # def get_queryset(self):
+    #     query = self.request.GET.get('q')
+    #     if query:
+    #         object_list = self.model.objects.filter(title__icontains=query)
+    #     else:
+    #         object_list = self.model.objects.none()
+    #     return object_list
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
         search_input = self.request.GET.get('search-area') or ""
         if search_input:
-            context['questions'] = context['questions'].filter(title__icontains = search_input)
+            context['questions'] = Question.objects.filter(title__icontains = search_input)
             context['search_input'] = search_input 
         # Pagination
         
@@ -108,18 +146,49 @@ class QuestionCreateView(LoginRequiredMixin,CreateView):
     model = Question
     form_class = QuestionForm
     #fields = ['title', 'content','anonymous']
+
     context_object_name =  'question'
+    def get_context_data(self, **kwargs):
+        context = super(QuestionCreateView, self).get_context_data(**kwargs)
+        context['tags'] = Tag.objects.all().order_by('name')
+        # Add any other variables to the context here
+        ...
+        return context
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
     
+    
+    
+class test(LoginRequiredMixin,CreateView):
+    model = Question
+    form_class = QuestionForm
+    #fields = ['title', 'content','anonymous']
+    template_name = "cstebase/test.html"
 
+    context_object_name =  'question'
+    def get_context_data(self, **kwargs):
+        context = super(test, self).get_context_data(**kwargs)
+        context['tags'] = Tag.objects.all().order_by('name')
+        # Add any other variables to the context here
+        ...
+        return context
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+    
+   
 
 
 class QuestionUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Question
     #fields = ['title', 'content','anonymous']
+    tags = Tag.objects.all()
+    context ={
+            'tags':tags
+        }
     form_class = QuestionForm
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -156,7 +225,7 @@ class CommentDetailView(CreateView):
 
     
 
-class AddCommentView(CreateView):
+class AddCommentView(LoginRequiredMixin,CreateView):
     model = Comment 
     form_class = CommentForm
     
@@ -208,3 +277,20 @@ def ShowAllQuestionProfileBased(request,str):
     #         context['search_input'] = search_input 
     
     return render(request,'cstebase/question_list.html',context)
+
+
+def About_page(request):
+    nstu = 'About NSTU'
+    vc = 'Vice Chancellor'
+    about_member = teamMember.objects.all
+    # about_nstu = About.objects.get()
+    about_nstu = AboutPage.objects.get(title=nstu)
+    about_vc = AboutPage.objects.get(title=vc)
+    context={
+        'about_member':about_member,
+        'about_nstu':about_nstu,
+        'about_vc':about_vc
+    }
+    
+    
+    return render(request,'cstebase/about.html',context)
