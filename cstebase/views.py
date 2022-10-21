@@ -263,7 +263,7 @@ def ShowProfile(request,str):
 #     }
 #     return render(request,'cstebase/question_list.html',context)
 def ShowAllQuestionProfileBased(request,str):
-    questions = Question.objects.filter(user__username = str)
+    questions = Question.objects.filter(user__username = str).order_by('-date_created')
     # questions = Question.objects.filter(user = str)
     paginate_by = 4
     context = {
@@ -276,7 +276,7 @@ def ShowAllQuestionProfileBased(request,str):
     #         context['questions'] = context['questions'].filter(title__icontains = search_input)
     #         context['search_input'] = search_input 
     
-    return render(request,'cstebase/question_list.html',context)
+    return render(request,'cstebase/question_list_profile.html',context)
 
 
 def About_page(request):

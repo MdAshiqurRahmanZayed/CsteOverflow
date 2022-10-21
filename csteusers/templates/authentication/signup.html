@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+     <!-- CSS only -->
+
+
+     <style>
+         .container-signup {
+               font-size: 2rem;
+               padding:0px 400px
+          }
+
+          .form-control {
+               font-size: 3rem;
+          }
+
+          form {
+               margin-bottom: 100px;
+          }
+
+          .btn-Sign {
+               font-size: 2.5rem;
+          }
+     </style>
+</head>
+
+<body>
+     <br>
+     <br>
+     <br>
+     <br>
+     <br>
+     <div class="container-signup">
+
+
+          <h4><b>SIGNUP</b> </h4>
+          {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+               <strong>Message:</strong> {{ message }}
+               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+               </button>
+          </div>
+          {% endfor %}
+           {% comment %} <form action="{% url 'signup' %}" method="post">
+               {% csrf_token %}
+               <label for="">Username</label>
+               <br>
+               <input type="text" id='username' name='username' placeholder='Create a usertname' Required>
+               <br>
+
+
+               <br>
+               <label class="form-label" for="form3Example3">Email address</label>
+               <input type="email" id='email' name='email' placeholder='Create your Email' Required>
+               <br>
+               <label for="">Password</label>
+               <input type="password" id='pass1' name='pass1' placeholder='Create your Password' Required>
+               <br>
+               <label for="">Confirm Password</label>
+               <input type="password" id='pass2' name='pass2' placeholder='Confirm your Password' Required>
+               <br>
+               <button type="submit">Sign Up</button>
+          </form>  {% endcomment %}
+
+
+          <form action="{% url 'signup' %}" method="post">
+               {% csrf_token %}
+               <div class="form-group">
+                    <label for="exampleInputEmail1">Username</label>
+                    <input type="text" class="form-control" id='username' name='username'
+                         placeholder='Create a unique username' Required> </div>
+               <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input type="email" class="form-control" id='email' name='email' placeholder='Create your Email'
+                         Required>
+               </div>
+               <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" id='pass1' name='pass1'
+                         placeholder='Create your Password' Required>
+               </div>
+               <div class="form-group">
+                    <label for="exampleInputPassword1">Confirm your Password</label>
+                    <input type="password" class="form-control" id='pass2' name='pass2'
+                         placeholder='Confirm your Password' Required>
+               </div>
+
+               <button type="submit" class="btn btn-primary btn-Sign">Sign up</button>
+               <br>
+               <br>
+               <br>
+          </form>
+
+     </div>
+</body>
+
+</html>
+{% endblock %}

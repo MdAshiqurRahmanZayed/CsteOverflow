@@ -185,11 +185,17 @@
 
                                 <form action="" method="POST">
                                     {% csrf_token %}
-                                    {{form|crispy}}
+                                    {% comment %} <h2>Name</h2> {% endcomment %}
+                                    {% comment %} {{form.name}} {% endcomment %}
+                                    
+                                    <input type="hidden" name="name" class="form-control form-control form-control-lg " maxlength="100" value="{{request.user}}" required id="id_name">
+                                    <h2>Answer</h2>
+                                    {{form.content}}
                                     {% comment %} {{form.name}}
                                     {{form.content|safe}} {% endcomment %}
 
                                     {{ form.media }}
+                                    <br>
 
                                     <button class="btn btn-success" id="logout-btn" type="submit">Post Answer </button>
                                     <a style="text-decoration: none; " class="btn btn-outline-secondary"

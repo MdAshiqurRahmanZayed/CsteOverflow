@@ -202,7 +202,7 @@
 
                                    <h3 style="font-weight: normal; font-size: 15px;">{{comment.content|safe}}</h3>
 
-                                   <h3 style="font-size: 10px;">Answered by: <i><a href="">{{comment.name}}</a> - On:
+                                   <h3 style="font-size: 10px;">Answered by: <i><a href="{% url 'cstebase:show_profile' comment.name  %}">{{comment.name}}</a> - On:
                                              {{comment.date_created|date:"j F, Y"}}</i>
 
                                    </h3>

@@ -21,20 +21,27 @@ from django.contrib.auth import views as auth_view
 from django.conf import settings
 from django.conf.urls.static import static
 from cstebase import views
-
+from csteusers.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('cstebase.urls')),
     
     # Authentication System
-    path('register/',user_view.register,name='register'),
-    path('login/',auth_view.LoginView.as_view(template_name='csteusers/login.html'),name='login'),
+    # path('register/',user_view.register,name='register'),
+    # path('login/',auth_view.LoginView.as_view(template_name='csteusers/login.html'),name='login'),
     path('logout/',auth_view.LogoutView.as_view(template_name='csteusers/logout.html'),name='logout'),
+    
+    #email authentications
+    path('signup/',user_view.signup,name='signup'),
+    path('signin/',user_view.signin,name='signin'),
+    path('activate/<uidb64>/<token>',activate,name='activate'),
     
     # Profile 
     path('profile/',user_view.profile,name= "profile" ),
     path('profile/update',user_view.profile_update,name= "profile_update" ),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
+    # path('ckeditor/', include('ckeditor_uploader.urls')),
+    # path('authentication/',include('csteusers.urls'))
+    
     
     
 ] 

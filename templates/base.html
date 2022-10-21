@@ -93,18 +93,9 @@
                                     <a href="{% url 'cstebase:home' %}" class="nav-link">CSTE Overflow</a>
                                 </li>
                                 <li class="nav-item"><a href="{% url 'cstebase:tags' %}" class="nav-link">Tags</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Users</a></li>
+                                
                             </ul>
-                            <h5>Find a Job</h5>
-                            <ul class="nav-ul">
-                                <li class="nav-item"><a href="#" class="nav-link">Jobs</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Companies</a></li>
-                            </ul>
-                            <h5>Teams <a href="#">What's this ?</a></h5>
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-briefcase"></i>
-                                <span>Free 30 Day Trial</span>
-                            </a>
+                            
                         </div>
                     </div>
                   
@@ -126,7 +117,6 @@
                 <div class="nav-base-links">
                     <ul>
                         <li><a href="{% url 'cstebase:about' %}">About</a></li>
-                        <li><a href="#">Products</a></li>
                         <li><a href="http://127.0.0.1:8000/about/#contributor">For Teams</a></li>
                     </ul>
                 </div>
@@ -135,7 +125,7 @@
                     <div class="search-container">
                         <i class="fas fa-search"></i>
                         <form action="" method="GET">
-                            <input style="width:500px" type="text" id="" name="search-area" placeholder="Search...">
+                            <input style="width:400px" type="text" id="" name="search-area" placeholder="Search...">
                             <button type="submit"
                                 style=" border-radius: 25px; border: none; padding: 8px;">Search</button>
                         </form>
@@ -162,7 +152,7 @@
 
                 </div>
                 {% else %}
-               <a href="{% url 'cstebase:question-lists' %}"> <button type="submit" style="margin-left: 340px;margin-top:10px; border-radius: 25px; border: none; padding: 8px;">Search</button></a>
+               <a href="{% url 'cstebase:question-lists' %}"> <button type="submit" style="margin-left: 300px;margin-top:10px; border-radius: 30px; border: none; padding: 8px;">Search</button></a>
                 {% endif %}
                 
                 
@@ -176,8 +166,8 @@
                     <a href="{% url 'profile' %}" class="btn btn-login">Profile</a>
                     <a href="{% url 'logout' %}" class="btn btn-register">Logout</a>
                     {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-login">Log in</a>
-                    <a href="{% url 'register' %}" class="btn btn-register">Sign up</a>
+                    <a href="{% url 'signin' %}" class="btn btn-login">Log in</a>
+                    <a href="{% url 'signup' %}" class="btn btn-register">Sign up</a>
                     {% endif %}
                 </div>
             </nav>
