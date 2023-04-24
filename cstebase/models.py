@@ -23,7 +23,7 @@ class Question(models.Model):
     
     
     def __str__(self):
-        return f'{self.user.username} - Question'
+        return f'{self.title}'
     
     def get_absolute_url(self):
         return reverse('cstebase:question-detail', kwargs={'pk':self.pk})
@@ -33,12 +33,9 @@ class Question(models.Model):
 
 
 class Comment(models.Model):
-
     question = models.ForeignKey(Question,related_name="comment", on_delete=models.CASCADE)
-    name = models.CharField( max_length=100)
-    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = RichTextField()
-    # content = models.TextField(null=True,blank=True)
     date_created = models.DateTimeField(default=timezone.now)
     answered = models.BooleanField(default=False)
     

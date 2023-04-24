@@ -1,15 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-     <meta charset="UTF-8">
-     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Document</title>
      <style>
+          .container{
+               margin-top:100px;
+          }
           .cards {
                width: 100%;
                display: flex;
@@ -68,52 +64,34 @@
                text-align: center;
           }
      </style>
-</head>
 
-<body>
-     <br>
-     <br>
-     <br>
-     <br>
-     <br>
-     <br>
-     <br>
-     <br>
-     <br>
      <div class="container">
 
           <div class="row mb-5">
 
                <div class="d-md-flex post-entry-2 half">
-                    <a href="" style="padding-right:50px" class="me-4 thumbnail">
-                         <img style="border-radius:40px;box-shadow:20px 20px 10px #ccc;backdrop-filter:blur(8px);height:300px;width:3500px"
+                    <a href="" style="" class="me-4 thumbnail">
+                         <img style="border-radius:40px;box-shadow:20px 20px 10px #ccc;backdrop-filter:blur(8px);height:300px;width:3600px"
                               src="{{about_nstu.image.url}}" alt="" class="img-fluid">
                     </a>
                     <div class="ps-md-5 mt-4 mt-md-0">
 
-                         <h2 class="mb-4 display-4">{{about_nstu.name}}</h2>
+                         <h3 class="mb-4 ">{{about_nstu.name}}</h3>
 
-                         <h3>{{about_nstu.about|safe}}</h3>
+                         <p>{{about_nstu.about|safe}}</p>
                     </div>
                </div>
-               <br>
-               <br>
-               <br>
-               <hr>
-               <br>
-               <hr>
-               <hr>
-               <br>
-               <div style="padding-top:40px" class="d-md-flex post-entry-2 half">
+              
+               <div style="" class="d-md-flex post-entry-2 half">
                     <div class="ps-md-5 mt-4 mt-md-0">
                          <h1>{{about_vc.title}}</h1>
 
-                         <h2 class="mb-4 display-4">{{about_vc.name}}</h2>
+                         <h3 class="mb-4 ">{{about_vc.name}}</h3>
 
-                         <h3>{{about_vc.about|safe}}</h3>
+                         <p>{{about_vc.about|safe}}</p>
                     </div>
                     <a href="" style="padding-left:50px" class="me-4 thumbnail">
-                         <img style="border-radius:10px;box-shadow:20px 20px 10px #ccc;backdrop-filter:blur(8px);height:200px;width:1000px"
+                         <img style="border-radius:10px;box-shadow:20px 20px 10px #ccc;backdrop-filter:blur(8px);height:400px;width:3000px"
                               src="{{about_vc.image.url}}" alt="" class="img-fluid">
                     </a>
                </div>
@@ -123,48 +101,21 @@
                <b id="contributor"> Contributor </b>
           </h2>
 
-
-          {% comment %} <div class="row">
-               {% for about_member  in  about_member %}
-               <div class="col-lg-4 text-center mb-5">
-                    <img style="width:250px;height:250px;border-radius:50%" src="{{about_member.image.url}}" alt="">
-                    <h1>{{about_member.name}}</h1>
-                    <span class="d-block mb-3 text-uppercase">{{about_member.title}}</span>
-                    <h3>{{about_member.about|safe}}</h3>
-               </div>
-               {% endfor %}
-          </div> {% endcomment %}
-
-          <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-          <h1>Card Image with description on :hover</h1>
           <div class="cards">
                {% for about_member  in  about_member %}
                <div class="card">
-                    <h2 class="card-title">{{about_member.name}}</h2>
+                    <h5 class="card-title">{{about_member.name}}
+                         <br>
+                         <b>{{about_member.title}}</b>
+                    </h5>
                     <img src="{{about_member.image.url}}" alt="">
-                    <p class="card-desc">{{about_member.about}}</p>
+                    <p class="card-desc">{{about_member.about|safe}}</p>
                </div>
                {% endfor %}
 
           </div>
-          {% comment %} <div class="questions-grid">
-               <div class="questions-grid-item">
-                    <div class="cards">
-                         {% for about_member  in  about_member %}
-                         <div class="card">
-                              <h2 class="card-title">{{about_member.name}}</h2>
-                              <img src="{{about_member.image.url}}" alt="">
-                              <p class="card-desc">{{about_member.about}}</p>
-                         </div>
-                         {% endfor %}
-                    </div>
-               </div>
-          </div> {% endcomment %}
+
      </div>
-
-</body>
-
-</html>
 
 
 {% endblock %}

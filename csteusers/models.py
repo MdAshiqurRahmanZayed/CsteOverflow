@@ -14,6 +14,7 @@ class Profile(models.Model):
      bio = models.CharField( max_length= 150)
      phone = models.IntegerField(blank=True, null=True) 
      image = models.ImageField(default ='default.jpg',  upload_to="images/profile")
+     linkedIn= models.CharField( max_length=50,null=True,blank=True)
      
      
      def __str__(self):

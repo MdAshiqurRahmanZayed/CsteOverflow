@@ -2,91 +2,35 @@
 {% load static %}
 {% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-     <meta charset="UTF-8">
-     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <style>
-    
-        
-          .containerTest{
-               box-sizing: border-box;
-               padding:80px;
-               width:auto;
-               margin-bottom:400px;
-          }
-          .container-signin {
-                    width:100%;
-                    font-size:2rem;
-               }
-
-          .authentication{
-                 padding:0;
-                 float:left;
-                 width:70%; /* The width is 20%, by default */
-          }
-
-          @media screen and (max-width:800px) {
-               .authentication {
-                         width:400px;
-                         height:250px; /* The width is 100%, when the viewport is 800px or smaller */
-               }
-               .container-signin {
-                    width:100%;
-                    font-size:2rem;
-               }
-               .containerTest{
-               width:auto;
-               margin-bottom:100px;
-               }
-          }
-
-
-     </style>
-</head>
-
-<body>
-     <div class="containerTest" >
-          <img class="authentication" src="{% static  'image/authentication.jpg' %}" alt="" srcset="">
-
-
-          <div class="container-signin">
-               <br>
-               <br>
-               <br>
-               <br>
+<div class="container margin-top margin-bottom p-5">
+     <div class="row">
+          <div class="col">
+               <img class="authentication" src="{% static  'image/authentication.jpg' %}" alt="" srcset="">
+          </div>
+          <div class="col">
                <h4><b>Sign In</b> </h4>
-               {% comment %} {% for message in messages %}
-               <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    <strong>Message:</strong> {{ message }}
 
-               </div>
-               {% endfor %} {% endcomment %}
                <form action="{% url 'signin' %}" method="post">
                     {% csrf_token %}
                     <div class="form-group">
-                         <label for="exampleInputEmail1">Username</label><br>
-                         <input class="input" type="text" class="form-control" id='username' name='username'
+                         <h4>Username</h4>
+                         <h6>username is email before @. <br>
+                              (exp: <b>email:</b>test01@gmail.com <b>username:</b>test01)</h6>
+                         <input class="input-signin" type="text" class="form-control" id='username' name='username'
                               placeholder='Enter your Username' Required> </div>
                     <br>
                     <div class="form-group">
-                         <label for="exampleInputPassword1">Password</label><br>
-                         <input class="input" type="password" class="form-control" id='pass1' name='pass1'
+                         <h4>Password</h4>
+                         <input class="input-signin" type="password" class="form-control" id='pass1' name='pass1'
                               placeholder='Enter your Password' Required>
                     </div>
-
-
-
-                    <button type="submit" class="btn btn-primary btn-Sign">Sign in</button>
+                    <button type="submit" class="btn btn-primary btn-Sign mt-3">Sign in</button>
                </form>
           </div>
      </div>
-</body>
+</div>
 
-</html>
 
 
 {% endblock  %}

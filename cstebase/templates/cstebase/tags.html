@@ -2,26 +2,18 @@
 {% block content %}
 
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<ol>
-  <div class="container">
+<div style="margin:100px" class="container">
+  <ol>
 
     {% for tag in tags %}
-  
-  
+
+
     <li style="font-size:2rem">
-     <a href="{% url 'cstebase:post_tag' tag.slug %}">{{tag.name}}</a>
+      <a href="{% url 'cstebase:post_tag' tag.slug %}">{{tag.name}}</a>
     </li>
     {% endfor %}
   </ol>
-  </div>
+</div>
 
 
 {% endblock content %}

@@ -13,8 +13,7 @@ from django.core.paginator import Paginator, EmptyPage
 from csteusers.models import Profile
 from django.contrib.auth.models import User
 from taggit.models import Tag 
-
-
+from django.db.models import Q
 #home
 def home(request):
     about_member = teamMember.objects.all
@@ -42,16 +41,6 @@ class Home(ListView):
     template_name = 'home.html'
     
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        search_input = self.request.GET.get('search-area') or ""
-        if search_input:
-            context['questions'] = context['questions'].filter(title__icontains = search_input)
-            context['search_input'] = search_input
-        return context
-    
-    
-    
 class TagListView(ListView):
     model = Question
    
@@ -65,55 +54,34 @@ class TagListView(ListView):
 # CRUD
 
 def like_view(request, pk):
-    post = get_object_or_404(Question, id=request.POST.get('question_id'))
-    liked = False
-    if post.likes.filter(id=request.user.id).exists():
-        post.likes.remove(request.user)
-        liked = False
+    question = Question.objects.get(id = pk)
+    if question.likes.filter(id = request.user.id).exists():
+        question.likes.remove(request.user)
     else:
-        post.likes.add(request.user)
-        liked = True
+        question.likes.add(request.user)
+    
     return HttpResponseRedirect(reverse('cstebase:question-detail', args=[str(pk)]))
 
-# class MyPaginator(Paginator):
-#     def validate_number(self, number):
-#         try:
-#             return super().validate_number(number)
-#         except EmptyPage:
-#             if int(number) > 1:
-#                 # return the last page
-#                 return self.num_pages
-#             elif int(number) < 1:
-#                 # return the first page
-#                 return 1
-#             else:
-#                 raise
 
 
 class QuestionListView(ListView):
     model = Question
     context_object_name = 'questions'
     ordering = ['-date_created']
-    paginate_by = 4
+    paginate_by = 2
     #paginator_class = MyPaginator # We use our paginator class 
     tags = Tag.objects.all 
     context ={
             'tags':tags
         }
-    # def get_queryset(self):
-    #     query = self.request.GET.get('q')
-    #     if query:
-    #         object_list = self.model.objects.filter(title__icontains=query)
-    #     else:
-    #         object_list = self.model.objects.none()
-    #     return object_list
+
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
         search_input = self.request.GET.get('search-area') or ""
         if search_input:
-            context['questions'] = Question.objects.filter(title__icontains = search_input)
+            context['questions'] = Question.objects.filter(Q(title__icontains = search_input))
             context['search_input'] = search_input 
         # Pagination
         
@@ -137,8 +105,29 @@ class QuestionDetailView(DetailView):
         context['liked'] = liked
         return context
     
+def questionDetailedView(request,pk):
+    question = Question.objects.get(id = pk)
+    form_comment = CommentForm(request.POST or None)
+    total_likes = question.likes.count()
+    try:
+        liked = question.likes.filter(id = request.user.id).exists()
+    except:
+        liked = False
+    if request.method == "POST":
+        if form_comment.is_valid():
+            form_comment = form_comment.save(commit=False)
+            form_comment.user = request.user
+            form_comment.question = question
+            form_comment.save()
+            return redirect('cstebase:question-detail',pk)
+    context={
+        'question':question,
+        'form_comment':form_comment,
+        'total_likes':total_likes,
+        'liked':liked,
+    }
+    return render(request,'cstebase/question_detail.html',context)
 
-    
  
 
 
@@ -148,12 +137,6 @@ class QuestionCreateView(LoginRequiredMixin,CreateView):
     #fields = ['title', 'content','anonymous']
 
     context_object_name =  'question'
-    def get_context_data(self, **kwargs):
-        context = super(QuestionCreateView, self).get_context_data(**kwargs)
-        context['tags'] = Tag.objects.all().order_by('name')
-        # Add any other variables to the context here
-        ...
-        return context
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -212,6 +195,17 @@ class QuestionDeleteView(UserPassesTestMixin,LoginRequiredMixin,DeleteView):
             return True
         return False
     
+def answeredQuestion(request,pk1,pk):
+    answered =  Comment.objects.get(id = pk)
+    if answered.answered :
+        answered.answered = False
+    else:
+        answered.answered = True
+        
+    answered.save()
+    return redirect('cstebase:question-detail',pk1)
+    
+
 
 class CommentDetailView(CreateView):
     model = Comment
@@ -223,18 +217,58 @@ class CommentDetailView(CreateView):
         return super().form_valid(form)
     success_url = reverse_lazy('cstebase:question-detail')
 
+def AddCommentView(request,pk):
+    question = Question.objects.get(id=pk)
+    
+    form  = CommentForm()
+    if request.method =="POST":
+        form  = CommentForm(request.POST ,request.FILES )
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.question = question
+            comment.save()
+            return redirect('cstebase:question-detail',pk)
+        
+    context = {
+        "form":form
+    }
+    return render(request,'cstebase/question-answer.html',context)
+    
+def EditCommentView(request,pk,comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    question = Question.objects.get(id=pk)
+    
+    
+    form  = CommentForm(instance=comment)
+    if request.method =="POST":
+        form  = CommentForm(request.POST ,request.FILES, instance=comment)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.save()
+            return redirect('cstebase:question-detail',pk)
+        
+    context = {
+        "form":form
+    }
+    return render(request,'cstebase/question-answer.html',context)
+   
+    
+def DeleteCommentView(request,pk,comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    question = Question.objects.get(id=pk)
+    if request.method =="POST":
+        comment.delete()
+        return redirect('cstebase:question-detail',pk)
+        
+    context = {
+        "comment":comment,
+        "question":question,
+    }
+    return render(request,'cstebase/question_confirm_delete.html',context)
+   
     
 
-class AddCommentView(LoginRequiredMixin,CreateView):
-    model = Comment 
-    form_class = CommentForm
-    
-    template_name = 'cstebase/question-answer.html'
-
-    def form_valid(self, form):
-        form.instance.question_id = self.kwargs['pk']
-        return super().form_valid(form)
-    success_url = reverse_lazy('cstebase:question-lists')
 
 #Show Profile
 def ShowProfile(request,str):
@@ -243,39 +277,22 @@ def ShowProfile(request,str):
     
     #ShowProfile = get_object_or_404(Profile,user = pk )
     context = {
-    
         'ShowProfile' :ShowProfile
     }
     return render(request,'cstebase/profile_page.html',context)
 
 
-# class ProfileDetailView(DetailView):
-#     model = Profile
-#     context_object_name = 'ShowProfile'
-#     template_name = "cstebase/profile_page.html"
 
-
-
-# def ShowAllQuestionProfileBased(request):
-#     questions = Question.objects.filter(id = request.user.profile.id)
-#     context = {
-#         'questions':questions
-#     }
-#     return render(request,'cstebase/question_list.html',context)
 def ShowAllQuestionProfileBased(request,str):
     questions = Question.objects.filter(user__username = str).order_by('-date_created')
     # questions = Question.objects.filter(user = str)
-    paginate_by = 4
+    paginator = Paginator(questions,2)
+    page = request.GET.get("page")
+    paged_products = paginator.get_page(page)
     context = {
-        'questions':questions
+        'questions':paged_products,
+        'page_obj':paged_products
     }
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     search_input = self.request.GET.get('search-area') or ""
-    #     if search_input:
-    #         context['questions'] = context['questions'].filter(title__icontains = search_input)
-    #         context['search_input'] = search_input 
-    
     return render(request,'cstebase/question_list_profile.html',context)
 
 
@@ -285,7 +302,7 @@ def About_page(request):
     about_member = teamMember.objects.all
     # about_nstu = About.objects.get()
     about_nstu = AboutPage.objects.get(title=nstu)
-    about_vc = AboutPage.objects.get(title=vc)
+    about_vc = AboutPage.objects.get(name=vc)
     context={
         'about_member':about_member,
         'about_nstu':about_nstu,
@@ -294,3 +311,23 @@ def About_page(request):
     
     
     return render(request,'cstebase/about.html',context)
+
+
+def search(request):
+   if 'keyword' in request.GET:
+      keyword = request.GET['keyword'] 
+      
+      print("helllo ",keyword)
+      if keyword:
+         keyword = Question.objects.order_by('-date_created').filter(title__icontains=keyword)
+         keyword_count = keyword.count()
+         
+      else:
+          keyword_count = 0
+         
+      context = {
+         'questions':keyword,
+          'keyword_count':keyword_count,
+      }
+   return render(request,'cstebase/question_list.html',context)
+

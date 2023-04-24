@@ -46,10 +46,9 @@ class DateInput(forms.DateInput):
 
 class ProfileUpdateForm(forms.ModelForm):
      birthday =  forms.DateField(widget=DateInput)
-
      class Meta:
           model = Profile
-          fields = ['first_name','last_name','birthday','bio','phone']
+          fields = ['first_name','last_name','birthday','bio','phone','linkedIn']
           widgets = {
               'birthday':DateInput(attrs={'class': 'form-control'}),
           }

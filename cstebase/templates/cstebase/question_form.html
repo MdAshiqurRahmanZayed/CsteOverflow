@@ -6,78 +6,41 @@
 <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 
 <div class="container">
-     <br>
-     <br>
-     <br>
-     <br>
-     <br>
-     <br>
-     <br>
-     <br>
-     <br>
-     <form action="" method="POST" enctype="multipart/form-data">
+
+     <form style="margin-top:150px" action="" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
-          <h1 >Title </h1>
-          <h5>Be specific and imagine you’re asking a question to another person</h5>
+          <h3>Title </h3>
+          <h6>Be specific and imagine you're asking a question to another person</h6>
           {{form.title}}
           <br>
-          <h1>Body </h1>
-          <h5>Include all the information someone would need to answer your question
-          </h5>
-
+          <h3>Body </h3>
           {{form.content}}
 
-          <h1>Tags</h1>
+          <h3>Tags</h3>
 
-          <h3>Press enter and select your tag.</h3>
-          <h5><a target="_blank" href="{% url 'cstebase:tags' %}">Show all tags</a>
-          </h5>
-
+          <h6>
+               <a target="_blank" href="{% url 'cstebase:tags' %}">Show all tags</a></h6>
+          <br>
           {{form.tags}}
-
-
-          <br>
-          <br>
-
-
-          <br>
-          <br>
-
-          <br>
-          <br>
-          <br>
-          <br>
-
-          <br>
-
-          <br>
-          <br>
-
-          <h1>If you want to hide your identity please check it on. </h1>
-          {{form.anonymous}}
-
+          <h3>If you want to hide your identity please check it on. </h3>
+          [<input class="form-check-input" type="checkbox" name="anonymous" id="id_anonymous">]
           {{ form.media }}
           <br>
-          <br>
-          <br>
+          <div class="container m-3">
 
-          {% if question.id is none %}
-          <button class="btn btn-success" id="logout-btn" type="submit">Post
-               Question</button>
-          <button class="btn btn-secondary" id="logout-btn" type="submit"><a id="fa"
-                    href="{% url 'cstebase:question-lists' %}" style="color: white; text-decoration: none;">Go
-                    back</a></button>
-          {% else %}
-          <button class="btn btn-success" id="logout-btn" type="submit">Post
-               Question</button>
-          <a style="text-decoration: none; " class="btn btn-outline-secondary"
-               href="{% url 'cstebase:question-detail' question.id %}">Cancel</a>
-          {% endif %}
-          <br>
-          <br>
-          <br>
-
-
+               {% if question.id is none %}
+               <button class="btn btn-success" id="logout-btn" type="submit">Post
+                    Question</button>
+               <button class="btn btn-secondary" id="logout-btn" type="submit"><a id="fa"
+                         href="{% url 'cstebase:question-lists' %}" style="color: white; text-decoration: none;">Go
+                         back</a></button>
+               {% else %}
+               <button class="btn btn-success" id="logout-btn" type="submit">
+                    Update Question</button>
+               <a style="text-decoration: none; " class="btn btn-outline-secondary"
+                    href="{% url 'cstebase:question-detail' question.id %}">Cancel</a>
+               {% endif %}
+          </div>
      </form>
      <script>
           $(document).ready(function () {
@@ -88,7 +51,6 @@
                     searchResultLimit: 5,
                     renderChoiceLimit: 5
                });
-
 
           });
      </script>
